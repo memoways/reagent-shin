@@ -19,20 +19,27 @@ nice clickable links to source in modern browsers)."
   [& forms]
   `(log (pr-str ~@forms)))
 
-(defmacro dbg
-  "Useful debugging macro that prints the source and value of x,
-as well as package name and line number. Returns x."
-  [x]
-  (let [ns (str cljs.analyzer/*cljs-ns*)]
-    `(let [x# ~x]
-       (println (str "dbg "
-                     ~ns ":"
-                     ~(:line (meta &form))
-                     ": "
-                     ~(pr-str x)
-                     ": "
-                     (pr-str x#)))
-       x#)))
+; (defmacro dbg
+;   "Useful debugging macro that prints the source and value of x,
+; as well as package name and line number. Returns x."
+;   [x]
+;   (let [ns (str cljs.analyzer/*cljs-ns*)]
+;     `(let [x# ~x]
+;        (println (str "dbg "
+;                      ~ns ":"
+;                      ~(:line (meta &form))
+;                      ": "
+;                      ~(pr-str x)
+;                      ": "
+;                      (pr-str x#)))
+;        x#)))
+(defmacro dbg [x]
+  `(let [x# ~x]
+     (println (str "dbg "
+                   ": "
+                   ~(pr-str x)
+                   ": "
+                   (pr-str x#)))))
 
 (defmacro dev?
   "True if assertions are enabled."
