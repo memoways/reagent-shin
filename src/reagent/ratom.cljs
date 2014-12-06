@@ -80,7 +80,9 @@
     (set! watches (dissoc watches key)))
 
   IHash
-  (-hash [this] (goog/getUid this)))
+  ; (-hash [this] (goog/getUid this))
+  (-hash [this] 0)
+  )
 
 (defn atom
   "Like clojure.core/atom, except that it keeps track of derefs."
@@ -201,12 +203,12 @@
       ((or auto-run run) this)))
 
   (-update-watching [this derefed]
-    (doseq [w derefed]
-      (when-not (contains? watching w)
-        (add-watch w this -handle-change)))
-    (doseq [w watching]
-      (when-not (contains? derefed w)
-        (remove-watch w this)))
+    (doall (map (fn [w]
+                  (when-not (contains? watching w)
+                    (add-watch w this -handle-change))) derefed))
+    (doall (map (fn [w]
+                  (when-not (contains? derefed w)
+                    (remove-watch w this))) watching))
     (set! watching derefed))
 
   IRunnable
@@ -259,7 +261,9 @@
     (-write writer ">"))
 
   IHash
-  (-hash [this] (goog/getUid this)))
+  ; (-hash [this] (goog/getUid this))
+  (-hash [this] 0)
+)
 
 (defn make-reaction [f & {:keys [auto-run on-set on-dispose derefed]}]
   (let [runner (if (= auto-run true) run auto-run)

@@ -3,10 +3,14 @@
             ; [clojure.java.io :as io]
             ))
 
+; (defn- js-call [f args]
+;   (let [argstr (->> (repeat (count args) "~{}")
+;                     (join ","))]
+;     (list* 'js* (str "~{}(" argstr ")") f args)
+;     ))
+; Use shin built-in for the time being
 (defn- js-call [f args]
-  (let [argstr (->> (repeat (count args) "~{}")
-                    (join ","))]
-    (list* 'js* (str "~{}(" argstr ")") f args)))
+  `(*js-call ~f ~@args))
 
 (defn- dot-args [object member]
   (assert (or (symbol? member)
