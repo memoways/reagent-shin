@@ -240,8 +240,8 @@
 
   IDisposable
   (dispose! [this]
-    (doseq [w watching]
-      (remove-watch w this))
+    (doall (map (fn [w]
+                  (remove-watch w this)) watching))
     (set! watching #{})
     (set! state nil)
     (set! dirty? true)
@@ -261,8 +261,8 @@
     (-write writer ">"))
 
   IHash
-  ; (-hash [this] (goog/getUid this))
-  (-hash [this] 0)
+; (-hash [this] (goog/getUid this))
+(-hash [this] 0)
 )
 
 (defn make-reaction [f & {:keys [auto-run on-set on-dispose derefed]}]
